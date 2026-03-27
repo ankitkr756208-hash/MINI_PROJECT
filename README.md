@@ -10,13 +10,13 @@ A collection of beginner-friendly projects built using web technologies and prog
 
 * A real-time analog clock built using HTML, CSS, and JavaScript
 * Shows current time with hour, minute, and second hands
-🚀 **Live Demo:** https://analogclock7562.netlify.app/
+*🚀 **Live Demo:** https://analogclock7562.netlify.app/
 
 ### 🧮 Calculator
 
 * A simple calculator for basic arithmetic operations
 * Supports addition, subtraction, multiplication, and division
-
+*🚀 **Live Demo:** : https://modifycalculator7562.netlify.app/
 ---
 
 ## 🛠️ Tech Stack
