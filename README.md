@@ -10,7 +10,7 @@ A collection of beginner-friendly projects built using web technologies and prog
 
 * A real-time analog clock built using HTML, CSS, and JavaScript
 * Shows current time with hour, minute, and second hands
-🚀 **Live Demo:** https://smartcart-ai-75.streamlit.app/
+🚀 **Live Demo:** https://analogclock7562.netlify.app/
 
 ### 🧮 Calculator
 
