@@ -10,13 +10,25 @@ A collection of beginner-friendly projects built using web technologies and prog
 
 * A real-time analog clock built using HTML, CSS, and JavaScript
 * Shows current time with hour, minute, and second hands
-*🚀 **Live Demo:** https://analogclock7562.netlify.app/
+  🚀 **Live Demo:** https://analogclock7562.netlify.app/
+
+---
 
 ### 🧮 Calculator
 
 * A simple calculator for basic arithmetic operations
 * Supports addition, subtraction, multiplication, and division
-*🚀 **Live Demo:** : https://modifycalculator7562.netlify.app/
+  🚀 **Live Demo:** https://modifycalculator7562.netlify.app/
+
+---
+
+### ✅ To-Do List
+
+* A simple and interactive to-do list app
+* Add, delete, and manage daily tasks
+* Helps in improving productivity
+  🚀 **Live Demo:** https://ankittodolist7562.netlify.app/
+
 ---
 
 ## 🛠️ Tech Stack
@@ -38,6 +50,11 @@ MINI_PROJECT/
 │   └── script.js
 │
 ├── Calculator/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── Todo_List/
 │   ├── index.html
 │   ├── style.css
 │   └── script.js
