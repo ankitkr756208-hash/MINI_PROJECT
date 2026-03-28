@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Life To-Do List</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap');
+
+        :root {
+            --paper-bg: #fdfdfa;
+            --lines-color: #e0e0e0;
+            --ink-color: #333;
+            --accent-blue: #3b82f6;
+            --accent-green: #16a34a;
+            --accent-red: #ef4444;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Kalam', cursive;
+            background-color: #dbeafe; /* A soft blue background like a desk */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .todo-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--paper-bg);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            padding: 30px;
+            border: 1px solid #fff;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--ink-color);
+            margin: 0 0 20px 0;
+            border-bottom: 2px solid var(--lines-color);
+            padding-bottom: 15px;
+        }
+
+        .input-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #taskInput {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            border-bottom: 2px dashed var(--lines-color);
+            padding: 10px 5px;
+            font-family: 'Kalam', cursive;
+            font-size: 1.2rem;
+            color: var(--ink-color);
+            transition: border-color 0.3s;
+        }
+
+        #taskInput:focus {
+            outline: none;
+            border-bottom-color: var(--accent-blue);
+        }
+
+        #addTaskBtn {
+            border: none;
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        #addTaskBtn:hover {
+            background-color: #2563eb;
+            transform: scale(1.1);
+        }
+
+        #taskList {
+            list-style: none;
+            padding: 0;
+            margin-top: 25px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 5px;
+            border-bottom: 1px solid var(--lines-color);
+            transition: all 0.3s ease-in-out;
+            position: relative;
+        }
+        
+        /* The "Real-Life" Hover Effect */
+        #taskList:hover .task-item:not(:hover) {
+            opacity: 0.5;
+            filter: blur(1px);
+        }
+
+        .task-item:hover {
+            transform: scale(1.03);
+        }
+
+        .task-item .task-text {
+            flex-grow: 1;
+            font-size: 1.2rem;
+            color: var(--ink-color);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.4s;
+        }
+
+        /* The animated check-off line */
+        .task-item.completed .task-text::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            height: 2px;
+            width: 100%;
+            background: var(--ink-color);
+            transform-origin: left;
+            animation: strike-through 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        .task-item.completed .task-text {
+            color: #aaa;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0; /* Hide actions by default */
+            transition: opacity 0.3s;
+        }
+        
+        .task-item:hover .task-actions {
+            opacity: 1; /* Show actions on hover */
+        }
+        
+        .task-actions button {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.4rem;
+            padding: 5px;
+            transition: transform 0.2s;
+        }
+        .task-actions button:hover {
+            transform: scale(1.2);
+        }
+
+        .complete-btn { color: var(--accent-green); }
+        .delete-btn { color: var(--accent-red); }
+
+        /* Animation Keyframes */
+        @keyframes strike-through {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .task-item.deleting {
+            animation: crumple-out 0.5s forwards;
+        }
+
+        @keyframes crumple-out {
+            to {
+                opacity: 0;
+                transform: scale(0.8) rotate(5deg);
+                filter: blur(2px);
+                height: 0;
+                padding: 0;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="todo-container">
+        <h1>My Tasks</h1>
+        <form class="input-form" id="taskForm">
+            <input type="text" id="taskInput" placeholder="Write a new task..." autocomplete="off">
+            <button id="addTaskBtn" type="submit">+</button>
+        </form>
+        <ul id="taskList">
+            </ul>
+    </div>
+
+    <script>
+        const taskForm = document.getElementById('taskForm');
+        const taskInput = document.getElementById('taskInput');
+        const taskList = document.getElementById('taskList');
+
+        // Event listener for adding a new task
+        taskForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const taskText = taskInput.value.trim();
+            if (taskText !== '') {
+                addTask(taskText);
+                taskInput.value = '';
+                taskInput.focus();
+            }
+        });
+
+        // Event listener for task actions (complete/delete) using event delegation
+        taskList.addEventListener('click', function(e) {
+            const item = e.target;
+            const taskItem = item.closest('.task-item');
+
+            if (!taskItem) return;
+
+            // Handle delete action
+            if (item.classList.contains('delete-btn')) {
+                deleteTask(taskItem);
+            }
+            // Handle complete action
+            if (item.classList.contains('complete-btn') || item.classList.contains('task-text')) {
+                toggleComplete(taskItem);
+            }
+        });
+
+        function addTask(text) {
+            const li = document.createElement('li');
+            li.className = 'task-item';
+            li.innerHTML = `
+                <span class="task-text">${text}</span>
+                <div class="task-actions">
+                    <button class="complete-btn">✓</button>
+                    <button class="delete-btn">🗑️</button>
+                </div>
+            `;
+            taskList.prepend(li); // Adds new tasks to the top
+        }
+
+        function toggleComplete(taskItem) {
+            taskItem.classList.toggle('completed');
+        }
+
+        function deleteTask(taskItem) {
+            taskItem.classList.add('deleting'); // Add animation class
+            // Wait for animation to finish before removing the element
+            taskItem.addEventListener('animationend', () => {
+                taskItem.remove();
+            });
+        }
+        
+        // Add some default tasks for demonstration
+        addTask("Finish the project report");
+        addTask("Buy groceries");
+        addTask("Call the bank");
+        addTask("Class Work");
+        addTask("Coding work");
+
+    </script>
+
+</body>
+</html>
